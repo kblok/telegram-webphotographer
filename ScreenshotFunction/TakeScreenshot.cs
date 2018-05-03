@@ -42,10 +42,7 @@ namespace ScreenshotFunction
                 var page = await browser.NewPageAsync();
                 
                 await page.GoToAsync(url);
-                var stream = await page.ScreenshotStreamAsync(new ScreenshotOptions
-                {
-                    FullPage = true
-                });
+                var stream = await page.ScreenshotStreamAsync();
 
                 byte[] bytesInStream = new byte[stream.Length];
                 stream.Read(bytesInStream, 0, bytesInStream.Length);
