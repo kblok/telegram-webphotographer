@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
@@ -10,6 +11,8 @@ namespace WebPhotographerBot
     class Program
     {
         public static string azureFunction = Environment.GetEnvironmentVariable("WEBPHOTOGRAPHER_AZUREFUNCTION");
+        private static ManualResetEvent Wait = new ManualResetEvent(false);
+
         static void Main(string[] args)
         {
             string telegramApiKey = Environment.GetEnvironmentVariable("WEBPHOTOGRAPHER_APIKEY");
@@ -19,7 +22,7 @@ namespace WebPhotographerBot
 
             botClient.StartReceiving(Array.Empty<UpdateType>());
             Console.WriteLine("Telegram Bot Started\npress any key to exit");
-            Console.ReadLine();
+            Wait.WaitOne();
             botClient.StopReceiving();
         }
 
