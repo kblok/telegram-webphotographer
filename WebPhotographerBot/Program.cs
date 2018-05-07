@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -35,17 +36,26 @@ namespace WebPhotographerBot
                     await bot.SendTextMessageAsync(e.Message.Chat.Id, "Prepping a screenshot for you my friend");
 
                     var url = (m.Value.StartsWith("http") ? string.Empty : "https://") + m.Value;
+                    MemoryStream stream = null;
 
                     try
                     {
+                        var data = await new WebClient().DownloadDataTaskAsync(azureFunction + url);
+                        stream = new MemoryStream(data);
+
                         await bot.SendPhotoAsync(
                             e.Message.Chat.Id,
-                            new Telegram.Bot.Types.FileToSend(azureFunction + url),
+                            new Telegram.Bot.Types.FileToSend("url", stream),
                             m.Value);
+                        
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         await bot.SendTextMessageAsync(e.Message.Chat.Id, "Unable to get a screenshot for you");
+                    }
+                    finally
+                    {
+                        stream?.Close();
                     }
                 }
             }
