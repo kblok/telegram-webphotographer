@@ -1,0 +1,9 @@
+version: '2.1'
+
+services:
+  telegrambotfriend:
+    image: telegramwebphotographer
+    build: .
+    environment:
+      - WEBPHOTOGRAPHER_APIKEY=BOT_APIKEY
+      - WEBPHOTOGRAPHER_AZUREFUNCTION=FUNCTIONENDPOINT
